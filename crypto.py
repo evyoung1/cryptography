@@ -59,8 +59,24 @@ def decrypt_help(numValue, offset):
 # Vigenere Cipher
 # Arguments: string, string
 # Returns: string
-def encrypt_vigenere(plaintext, keyword):
-    pass
+def encrypt_vigenere(plaintext,keyword):
+    plaintext_nums = ""
+    for character in plaintext:
+        ord(character) + (ord)
+
+def vigenere_key(plaintext, keyword):
+    keylist = list(keyword)
+    if len(plaintext) == len(keylist):
+        return keyword
+    if len(plaintext) < len(keyword):
+        keylist = keyword[0:len(keyword)-(len(keyword)-len(plaintext))]
+        return ("".join(keylist))
+    else:
+        for character in range(len(plaintext)-len(keylist)):
+            keylist.append(keylist[character%len(keylist)])
+    newKeyWord = "".join(keylist)
+    return newKeyWord
+
 
 # Arguments: string, string
 # Returns: string
@@ -90,7 +106,7 @@ def decrypt_mhkc(ciphertext, private_key):
 
 def main():
     # Testing code here
-    print(encrypt_caesar("ABCD", 3))
+    print(encrypt_vigenere("ATTACKATDAWN", "LEMON"))
 
 if __name__ == "__main__":
     main()
