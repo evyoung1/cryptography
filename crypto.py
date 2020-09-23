@@ -3,22 +3,58 @@
 # Arguments: string, integer
 # Returns: string
 def encrypt_caesar(plaintext, offset):
-    encrypted = ""
+    encryptedString = ""
+    alpha = "ABCDEFGHIJKLMNOPOQSTUVWXYZ"
+    begNum = 65
+    endNum = 90
+    numInAlpha = 26
     
     for character in plaintext:
-        numValue= ord(character)
-        #        if numValue >= ord("A") && numValue <= ord("Z") :
-        #
-        #            numValue = ord("A") +(ord("Z")- numValue)
-        #            s.join(chr(numValue))
+        if character in alpha:
+            numValue = ord(character) - begNum
+            if numValue + offset > numInAlpha - 1:
+                encryptedString += encrypt_help(numValue, offset)
+            else:
+                encryptedString += (chr(ord(character) + offset))
         else:
-        encrypted += chr(ord(character) + offset)
-    return encrypted
+            encryptedString = "No message received"
+    return encryptedString
+
+def encrypt_help(numValue, offset):
+    eString = ""
+    numInAlpha = 26
+    begNum = 65
+    numValue = (numValue + offset)%numInAlpha
+    eString = chr(numValue + begNum)
+    return eString
+
 
 # Arguments: string, integer
 # Returns: string
 def decrypt_caesar(ciphertext, offset):
-    pass
+    decryptedString = ""
+    alpha = "ABCDEFGHIJKLMNOPOQSTUVWXYZ"
+    begNum = 65
+    
+    for character in ciphertext:
+        if character in alpha:
+            numValue = ord(character) - begNum
+            if numValue - offset < 0:
+                decryptedString += decrypt_help(numValue, offset)
+            else:
+                decryptedString += (chr(ord(character) - offset))
+        else:
+            decryptedString = "No message received"
+    return decryptedString
+
+def decrypt_help(numValue, offset):
+    dString = ""
+    numInAlpha = 26
+    begNum = 65
+    numValue = (numValue - offset)% numInAlpha
+    eString = chr(numValue + begNum)
+    return eString
+
 
 # Vigenere Cipher
 # Arguments: string, string
