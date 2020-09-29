@@ -126,52 +126,104 @@ def create_public_key(private_key):
 # Arguments: string, tuple B
 # Returns: list of integers
 def encrypt_mhkc(plaintext, public_key):
-    pass
+    encrypted = []
+    M = []
+    for character in plaintext:
+        C = 0
+        M = byte_to_bits(ord(character))
+        #print(public_key[1])
+        for position in range (0, 8):
+            x = int(M[position])
+            y = int(public_key[position])
+            C += (x*y)
+        encrypted.append(C)
+    return encrypted
+#    return [sum([ (not (ord(plaintext[i]) & (1 << j)) == 0) * public_key[j] for j in range(0, len(public_key)) ]) for i in range(0, len(plaintext))]
 
-def bits_to_byte(bits):
-    bitsAsStrings = []
-    for element in bits:
-        bitsAsStrings.append(str(element))
-        bitString = "".join(bitsAsStrings)
-        byte = int(bitString,2)
-    return byte
+
+
 
 def byte_to_bits(byte):
     bits = []
     binary = bin(byte)[2:]
     for element in binary:
         bits.append(element)
-    if (len(bits) < 8)
+    if (len(bits) < 8):
         remainder = 8 % len(bits)
         for num in range(0, remainder):
             bits.insert(0,0)
     return bits
 
+
 # Arguments: list of integers, private key (W, Q, R) with W a tuple.
 # Returns: bytearray or str of plaintext
 def decrypt_mhkc(ciphertext, private_key):
-    pass
+
+    W = private_key[0]
+    Q = private_key[1]
+    R = private_key[2]
+    S = findS(R,Q)
+    Decrypted = []
+    for character in ciphertext:
+        C = character * S % Q
+        bitString = []
+        for element in reversed(W):
+            if element <= C:
+                bitString.append("1")
+                C = C - element
+            else:
+                bitString.append("0")
+        Decrypted.append(chr(bits_to_byte(reversed(bitString))))
+    return "".join(Decrypted)
+
+def bits_to_byte(bits):
+    bitsAsStrings = []
+    byte = 0
+    for element in bits:
+        bitsAsStrings.append(str(element))
+        bitString = "".join(bitsAsStrings)
+        byte = int(bitString,2)
+    return byte
+
+def findS(R, Q):
+    for S in range(2,Q - 1):
+        if (R * S % Q == 1):
+            return S
+    return 0
 
 def main():
     # Testing code here
-    plaintext = "ATTACKATDAWN"
-    keyword = "LEMON"
-    
-    string1 = encrypt_caesar(" ", 5)
-    print("Caesar Encryption: " + string1)
-    string2 = decrypt_caesar(string1, 5)
-    print("Caesar Decryption: " + string2)
-    
-    
-    string3 = encrypt_vigenere(plaintext, keyword)
-    print("Vigenere Encryption: " + string3)
-    string4 = decrypt_vigenere(string3, keyword)
-    print("Vigenere Decryption: " + string4)
+#    plaintext = "ATTACKATDAWN"
+#    keyword = "LEMON"
+#
+#    string1 = encrypt_caesar(" ", 5)
+#    print("Caesar Encryption: " + string1)
+#    string2 = decrypt_caesar(string1, 5)
+#    print("Caesar Decryption: " + string2)
+#
+#
+#    string3 = encrypt_vigenere(plaintext, keyword)
+#    print("Vigenere Encryption: " + string3)
+#    string4 = decrypt_vigenere(string3, keyword)
+#    print("Vigenere Decryption: " + string4)
 
-    print (create_public_key(generate_private_key()))
 
-    print (bits_to_byte([0, 0, 0, 1, 0, 1, 0, 1]))
+    p = generate_private_key()
+    b = (create_public_key(p))
+
+    x = (encrypt_mhkc("HELLO",b))
+
+    print(decrypt_mhkc(x, p))
 if __name__ == "__main__":
     main()
-
+#    plaintext = ''
+#    for i in range(0, len(ciphertext)):
+#        C = ciphertext[i] * S % Q
+#        charAsInt = 0
+#        for j in range(0, len(W)):
+#            if C >= W[7 - j]:
+#                C = C - W[7 - j]
+#                charAsInt = (1 <<  (7 - j)) | charAsInt
+#        plaintext += chr(charAsInt)
+#    return plaintext
 
