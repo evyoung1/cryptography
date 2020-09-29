@@ -216,14 +216,3 @@ def main():
     print(decrypt_mhkc(x, p))
 if __name__ == "__main__":
     main()
-#    plaintext = ''
-#    for i in range(0, len(ciphertext)):
-#        C = ciphertext[i] * S % Q
-#        charAsInt = 0
-#        for j in range(0, len(W)):
-#            if C >= W[7 - j]:
-#                C = C - W[7 - j]
-#                charAsInt = (1 <<  (7 - j)) | charAsInt
-#        plaintext += chr(charAsInt)
-#    return plaintext
-
