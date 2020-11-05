@@ -4,58 +4,38 @@ import random
 # Arguments: string, integer
 # Returns: string
 def encrypt_caesar(plaintext, offset):
-    encryptedString = ""
-    alpha = "ABCDEFGHIJKLMNOPOQSTUVWXYZ"
-    begNum = 65
-    endNum = 90
-    numInAlpha = 26
-    for character in plaintext:
-        if character in alpha:
-            numValue = ord(character) - begNum
-            if numValue + offset > numInAlpha - 1:
-                encryptedString += encrypt_help(numValue, offset)
-            else:
-                encryptedString += (chr(ord(character) + offset))
-        else:
-            encryptedString = "No message received"
-    return encryptedString
+    min = 64
+    max = 91
+    shift = 26
+    encrypt = ""
+    for letter in plaintext:
+        current = ord(letter)
+        if current > min and current < max:
+            character = ord(letter) + offset
+            if character > max - 1:
+                character = character - shift
+            current = character
+        encrypt = encrypt + chr(current)
+    
+    return encrypt
 
-# Arguments: integer, integer
-# Returns: string
-def encrypt_help(numValue, offset):
-    eString = ""
-    numInAlpha = 26
-    begNum = 65
-    numValue = (numValue + offset)%numInAlpha
-    eString = chr(numValue + begNum)
-    return eString
-
-# Arguments: string, integer
+# Arguments: String, integer
 # Returns: string
 def decrypt_caesar(ciphertext, offset):
-    decryptedString = ""
-    alpha = "ABCDEFGHIJKLMNOPOQSTUVWXYZ"
-    begNum = 65
-    for character in ciphertext:
-        if character in alpha:
-            numValue = ord(character) - begNum
-            if numValue - offset < 0:
-                decryptedString += decrypt_help(numValue, offset)
-            else:
-                decryptedString += (chr(ord(character) - offset))
-        else:
-            decryptedString = "No message received"
-    return decryptedString
+    min = 64
+    max = 91
+    shift = 26
+    decrypt = ""
+    for letter in ciphertext:
+        current = ord(letter)
+        if current > min and current < max:
+            character = ord(letter) - offset
+            if character < min + 1:
+                character = character + shift
+            current = character
+        decrypt = decrypt + chr(current)
+    return decrypt
 
-# Arguments: integer, integer
-# Returns: string
-def decrypt_help(numValue, offset):
-    dString = ""
-    numInAlpha = 26
-    begNum = 65
-    numValue = (numValue - offset)% numInAlpha
-    eString = chr(numValue + begNum)
-    return eString
 
 #Vigenere Cipher
 # Arguments: string, string
@@ -207,10 +187,14 @@ def main():
 #    print("Vigenere Encryption: " + string3)
 #    string4 = decrypt_vigenere(string3, keyword)
 #    print("Vigenere Decryption: " + string4)
-    p = generate_private_key()
-    b = (create_public_key(p))
-    x = (encrypt_mhkc("HELLO",b))
-    print(decrypt_mhkc(x, p))
-
+#    p = generate_private_key()
+#    b = (create_public_key(p))
+#    x = (encrypt_mhkc("HELLO",b))
+#    print(x)
+#    print(decrypt_mhkc(x, p))
+    hello ="WITH two SPACES"
+    hi = encrypt_caesar(hello, 3)
+    print(hi)
+    print(decrypt_caesar(hi, 3))
 if __name__ == "__main__":
     main()
